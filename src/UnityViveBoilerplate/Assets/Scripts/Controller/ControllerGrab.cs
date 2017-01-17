@@ -94,6 +94,13 @@ namespace Assets.Scripts.Controller
 
                 // set grab options
                 _stayInHand = pickupOptions.StayInHand;
+
+                pickupOptions.Controller = Controller;
+
+                if (pickupOptions.OnGrab != null)
+                {
+                    pickupOptions.OnGrab.Invoke();
+                }
             }
 
             var joint = AddFixedJoint();
@@ -117,6 +124,13 @@ namespace Assets.Scripts.Controller
 
                 _objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
                 _objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
+            }
+
+            var pickupOptions = _objectInHand.GetComponent<PickupOptions>();
+            if (pickupOptions && pickupOptions.OnDrop != null)
+            {
+                pickupOptions.Controller = null;
+                pickupOptions.OnDrop.Invoke();
             }
 
             _objectInHand = null;
