@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Assets.Scripts.Common;
 using UnityEngine;
+using Valve.VR.InteractionSystem;
 
 namespace Assets.Scripts.Weapons
 {
@@ -43,6 +44,15 @@ namespace Assets.Scripts.Weapons
             {
                 CoolingDownUpdate();
             }
+            else if (_gunState == GunState.Empty)
+            {
+                EmptyState();
+            }
+        }
+
+        public void Reload()
+        {
+            _currentClip = ClipSize;
         }
 
         private void UpdateRumble()
@@ -80,6 +90,14 @@ namespace Assets.Scripts.Weapons
         {
             _currentCooldownSpeed -= Time.deltaTime;
             if (_currentCooldownSpeed <= 0)
+            {
+                _gunState = GunState.ReadyToFire;
+            }
+        }
+
+        private void EmptyState()
+        {
+            if (_currentClip > 0)
             {
                 _gunState = GunState.ReadyToFire;
             }
