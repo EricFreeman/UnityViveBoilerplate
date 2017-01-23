@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Common;
 using UnityEngine;
-using Valve.VR.InteractionSystem;
 
 namespace Assets.Scripts.Weapons
 {
@@ -13,7 +12,7 @@ namespace Assets.Scripts.Weapons
         private int _currentClip;
 
         public float CooldownSpeed = .25f;
-        public float _currentCooldownSpeed;
+        private float _currentCooldownSpeed;
 
         public float RumbleForceAmount = .25f;
         public float RumbleForceDuration = .05f;
@@ -21,12 +20,18 @@ namespace Assets.Scripts.Weapons
         public float EmptyRumbleForceAmount = .15f;
         public float EmptyRumbleForceDuration = .025f;
 
+        public AudioClip FireSound;
+        public AudioClip ReloadSound;
+        public AudioClip EmptySound;
+
         private PickupOptions _pickupOptions;
         private GunState _gunState = GunState.ReadyToFire;
+        private AudioSource _audioSource;
 
         void Start()
         {
             _pickupOptions = GetComponent<PickupOptions>();
+            _audioSource = GetComponent<AudioSource>();
             _currentClip = ClipSize;
         }
 
@@ -53,6 +58,7 @@ namespace Assets.Scripts.Weapons
         public void Reload()
         {
             _currentClip = ClipSize;
+            _audioSource.PlayOneShot(ReloadSound);
         }
 
         private void UpdateRumble()
@@ -75,6 +81,7 @@ namespace Assets.Scripts.Weapons
                 bullet.transform.rotation = tip.transform.rotation;
 
                 _currentClip--;
+                _audioSource.PlayOneShot(FireSound);
                 if (_currentClip <= 0)
                 {
                     _gunState = GunState.Empty;
@@ -97,6 +104,11 @@ namespace Assets.Scripts.Weapons
 
         private void EmptyState()
         {
+            if (_pickupOptions.Controller.GetHairTriggerDown())
+            {
+                _audioSource.PlayOneShot(EmptySound);
+            }
+
             if (_currentClip > 0)
             {
                 _gunState = GunState.ReadyToFire;
