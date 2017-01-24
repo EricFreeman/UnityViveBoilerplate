@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Assets.Scripts.Common;
+using Assets.Scripts.Extensions;
 using UnityEngine;
 
 namespace Assets.Scripts.Weapons
@@ -58,7 +59,7 @@ namespace Assets.Scripts.Weapons
         public void Reload()
         {
             _currentClip = ClipSize;
-            _audioSource.PlayOneShot(ReloadSound);
+            _audioSource.Randomize().PlayOneShot(ReloadSound);
         }
 
         private void UpdateRumble()
@@ -81,7 +82,7 @@ namespace Assets.Scripts.Weapons
                 bullet.transform.rotation = tip.transform.rotation;
 
                 _currentClip--;
-                _audioSource.PlayOneShot(FireSound);
+                _audioSource.Randomize().PlayOneShot(FireSound);
                 if (_currentClip <= 0)
                 {
                     _gunState = GunState.Empty;
@@ -106,7 +107,7 @@ namespace Assets.Scripts.Weapons
         {
             if (_pickupOptions.Controller.GetHairTriggerDown())
             {
-                _audioSource.PlayOneShot(EmptySound);
+                _audioSource.Randomize().PlayOneShot(EmptySound);
             }
 
             if (_currentClip > 0)
