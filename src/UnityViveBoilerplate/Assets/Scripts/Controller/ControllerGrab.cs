@@ -103,16 +103,21 @@ namespace Assets.Scripts.Controller
                 }
             }
 
-            var joint = AddFixedJoint();
-            joint.connectedBody = _objectInHand.GetComponent<Rigidbody>();
+            AddFixedJoint(_objectInHand);
         }
 
-        private FixedJoint AddFixedJoint()
+        private void AddFixedJoint(GameObject obj)
         {
             var fx = gameObject.AddComponent<FixedJoint>();
+            fx.connectedBody = obj.GetComponent<Rigidbody>();
+            fx.anchor = obj.transform.InverseTransformPoint(transform.Find("tip").position);
             fx.breakForce = 20000;
             fx.breakTorque = 20000;
-            return fx;
+        }
+
+        void OnJointBreak(float breakForce)
+        {
+            ReleaseObject();
         }
 
         private void ReleaseObject()
