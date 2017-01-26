@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.Scripts.Weapons
 {
@@ -19,7 +18,7 @@ namespace Assets.Scripts.Weapons
             var rigidbody = collider.GetComponent<Rigidbody>();
             if (rigidbody)
             {
-                rigidbody.AddForce(transform.forward * ImpactForce, ForceMode.Impulse);
+                rigidbody.AddForce(transform.forward*ImpactForce, ForceMode.Impulse);
             }
 
             Destroy(gameObject);
