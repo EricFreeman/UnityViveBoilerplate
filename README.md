@@ -1,5 +1,4 @@
 # Unity Vive Boilerplate
-==========
 
 Boilerplate project for using Unity with the SteamVR SDK.
 
